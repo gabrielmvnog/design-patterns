@@ -1,0 +1,68 @@
+from dataclasses import dataclass
+from typing import Dict, List, Self
+
+
+@dataclass
+class Helmet:
+    type_: str
+
+    def __repr__(self) -> str:
+        return f"{self.type_} helmet"
+
+
+@dataclass
+class Gauntlets:
+    type_: str
+
+    def __repr__(self) -> str:
+        return f"{self.type_} gauntlets"
+
+
+@dataclass
+class Greaves:
+    type_: str
+
+    def __repr__(self) -> str:
+        return f"{self.type_} greaves"
+
+
+@dataclass
+class Armour:
+    helmet: Helmet
+    greaves: Greaves
+    gauntlets: Gauntlets
+
+
+class Blacksmith:
+    def __init__(self) -> None:
+        self.inventory: Dict[str, Armour] = {}
+
+    def create_healmet(self: Self, type_: str) -> Helmet:
+        return Helmet(type_)
+
+    def create_greaves(self: Self, type_: str) -> Greaves:
+        return Greaves(type_)
+
+    def create_gauntlets(self: Self, type_: str) -> Gauntlets:
+        return Gauntlets(type_)
+
+    def create_armour(self: Self, type_: str) -> Armour:
+        if type_ not in self.inventory:
+            helmet = self.create_healmet(type_)
+            greaves = self.create_greaves(type_)
+            gauntlets = self.create_gauntlets(type_)
+
+            self.inventory[type_] = Armour(
+                helmet=helmet, greaves=greaves, gauntlets=gauntlets
+            )
+
+        return self.inventory[type_]
+
+
+if __name__ == "__main__":
+    blacksmith = Blacksmith()
+
+    golden_armour_one = blacksmith.create_armour("Golden")
+    golden_armour_two = blacksmith.create_armour("Golden")
+
+    assert golden_armour_one == golden_armour_two
